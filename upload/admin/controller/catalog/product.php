@@ -237,6 +237,18 @@ class ControllerCatalogProduct extends Controller {
 			$filter_model = null;
 		}
 
+        if (isset($this->request->get['filter_category'])) {
+            $filter_category = $this->request->get['filter_category'];
+            $this->load->model('catalog/category');
+            $category_data = ['filter_name' => $this->request->get['filter_category']];
+            $categories = $this->model_catalog_category->getCategories($category_data);
+            $filter_category_ids = array_column($categories, 'category_id') ?? ['empty'];
+            $filter_category_ids = empty($filter_category_ids) ? [-1] : $filter_category_ids;
+        } else {
+            $filter_category = null;
+            $filter_category_ids = null;
+        }
+
 		if (isset($this->request->get['filter_price'])) {
 			$filter_price = $this->request->get['filter_price'];
 		} else {
@@ -289,6 +301,10 @@ class ControllerCatalogProduct extends Controller {
 			$url .= '&filter_model=' . urlencode(html_entity_decode($this->request->get['filter_model'], ENT_QUOTES, 'UTF-8'));
 		}
 
+        if (isset($this->request->get['filter_category'])) {
+            $url .= '&filter_category=' . urlencode(html_entity_decode($this->request->get['filter_category'], ENT_QUOTES, 'UTF-8'));
+        }
+
 		if (isset($this->request->get['filter_price'])) {
 			$url .= '&filter_price=' . $this->request->get['filter_price'];
 		}
@@ -337,7 +353,8 @@ class ControllerCatalogProduct extends Controller {
 
 		$filter_data = array(
 			'filter_name'	  => $filter_name,
-			'filter_model'	  => $filter_model,
+            'filter_model'	  => $filter_model,
+			'filter_category_ids'   => $filter_category_ids,
 			'filter_price'	  => $filter_price,
 			'filter_quantity' => $filter_quantity,
 			'filter_status'   => $filter_status,
@@ -403,7 +420,8 @@ class ControllerCatalogProduct extends Controller {
 		$data['column_action'] = $this->language->get('column_action');
 
 		$data['entry_name'] = $this->language->get('entry_name');
-		$data['entry_model'] = $this->language->get('entry_model');
+        $data['entry_model'] = $this->language->get('entry_model');
+		$data['entry_category_single'] = $this->language->get('entry_category_single');
 		$data['entry_price'] = $this->language->get('entry_price');
 		$data['entry_quantity'] = $this->language->get('entry_quantity');
 		$data['entry_status'] = $this->language->get('entry_status');
@@ -446,6 +464,10 @@ class ControllerCatalogProduct extends Controller {
 		if (isset($this->request->get['filter_model'])) {
 			$url .= '&filter_model=' . urlencode(html_entity_decode($this->request->get['filter_model'], ENT_QUOTES, 'UTF-8'));
 		}
+
+        if (isset($this->request->get['filter_category'])) {
+            $url .= '&filter_category=' . urlencode(html_entity_decode($this->request->get['filter_category'], ENT_QUOTES, 'UTF-8'));
+        }
 
 		if (isset($this->request->get['filter_price'])) {
 			$url .= '&filter_price=' . $this->request->get['filter_price'];
@@ -525,7 +547,8 @@ class ControllerCatalogProduct extends Controller {
 		$data['results'] = sprintf($this->language->get('text_pagination'), ($product_total) ? (($page - 1) * $this->config->get('config_limit_admin')) + 1 : 0, ((($page - 1) * $this->config->get('config_limit_admin')) > ($product_total - $this->config->get('config_limit_admin'))) ? $product_total : ((($page - 1) * $this->config->get('config_limit_admin')) + $this->config->get('config_limit_admin')), $product_total, ceil($product_total / $this->config->get('config_limit_admin')));
 
 		$data['filter_name'] = $filter_name;
-		$data['filter_model'] = $filter_model;
+        $data['filter_model'] = $filter_model;
+        $data['filter_category'] = $filter_category;
 		$data['filter_price'] = $filter_price;
 		$data['filter_quantity'] = $filter_quantity;
 		$data['filter_status'] = $filter_status;
@@ -595,7 +618,7 @@ class ControllerCatalogProduct extends Controller {
 		$data['entry_store'] = $this->language->get('entry_store');
 		$data['entry_manufacturer'] = $this->language->get('entry_manufacturer');
 		$data['entry_download'] = $this->language->get('entry_download');
-		$data['entry_category'] = $this->language->get('entry_category');
+        $data['entry_category'] = $this->language->get('entry_category');
 		$data['entry_filter'] = $this->language->get('entry_filter');
 		$data['entry_related'] = $this->language->get('entry_related');
 		$data['entry_attribute'] = $this->language->get('entry_attribute');
