@@ -747,3 +747,12 @@ h2.price {
     background-image: none;
     background-color: #df5c39;
 }
+
+.discount_amount {
+	position: absolute;
+	font-size: medium;
+	top: 10px;
+	left: 30px;
+	text-decoration: none;
+	color: red
+}

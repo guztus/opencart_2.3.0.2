@@ -311,6 +311,10 @@ class ControllerProductProduct extends Controller {
 			}
 
 			if ((float)$product_info['special']) {
+                $priceStandard = $this->tax->calculate($product_info['price'], $product_info['tax_class_id'], $this->config->get('config_tax'));
+                $priceSpecial =  $this->tax->calculate($product_info['special'], $product_info['tax_class_id'], $this->config->get('config_tax'));
+                $discountAmount = round((($priceSpecial - $priceStandard) / $priceStandard) * 100);
+                $data['discount_amount'] = sprintf($this->language->get('text_discount_amount'), $discountAmount * -1 . "%");
 				$data['special'] = $this->currency->format($this->tax->calculate($product_info['special'], $product_info['tax_class_id'], $this->config->get('config_tax')), $this->session->data['currency']);
 			} else {
 				$data['special'] = false;
