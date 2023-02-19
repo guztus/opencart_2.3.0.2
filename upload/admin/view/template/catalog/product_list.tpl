@@ -31,7 +31,7 @@
       </div>
       <div class="panel-body">
         <div class="well">
-          <div class="row">
+          <div class="row" style="position: relative; padding-bottom: 40px">
             <div class="col-sm-4">
               <div class="form-group">
                 <label class="control-label" for="input-name"><?php echo $entry_name; ?></label>
@@ -89,8 +89,8 @@
                   <?php } ?>
                 </select>
               </div>
-              <button type="button" id="button-filter" class="btn btn-primary pull-right"><i class="fa fa-filter"></i> <?php echo $button_filter; ?></button>
             </div>
+            <button type="button" id="button-filter" class="btn btn-primary pull-right" style="position: absolute; bottom: 0; right: 15px"><i class="fa fa-filter"></i> <?php echo $button_filter; ?></button>
           </div>
         </div>
         <form action="<?php echo $delete; ?>" method="post" enctype="multipart/form-data" id="form-product">
